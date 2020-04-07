@@ -156,10 +156,8 @@ promotion_requires: &promotion_requires
     hadolint,
     test-check-command-docker,
     test-check-command-machine,
-    test-check-command-macos,
     test-credentials-store-docker,
     test-credentials-store-machine,
-    test-credentials-store-macos,
     publish-machine,
     publish-docker-cache,
     publish-docker-cache-not-found,
@@ -168,8 +166,6 @@ promotion_requires: &promotion_requires
     older-alpine,
     latest-machine,
     older-machine,
-    latest-mac,
-    older-mac,
     latest-docker,
     older-docker,
     latest-ci-docker,
@@ -178,8 +174,6 @@ promotion_requires: &promotion_requires
     older-alpine-altogether,
     latest-machine-altogether,
     older-machine-altogether,
-    latest-mac-altogether,
-    older-mac-altogether,
     latest-docker-altogether,
     older-docker-altogether,
     latest-ci-docker-altogether,
@@ -236,16 +230,6 @@ workflows:
           docker-password: DOCKER_PASS
           use-docker-credentials-store: true
 
-      - test-check-command:
-          name: test-check-command-macos
-          executor: orb-tools/macos
-          context: orb-publishing
-          docker-username: DOCKER_USER
-          docker-password: DOCKER_PASS
-          use-docker-credentials-store: true
-          pre-steps:
-            - docker/install-docker
-
       # login with credentials store does not result in warning
       - test-credentials-store:
           name: test-credentials-store-docker
@@ -261,15 +245,6 @@ workflows:
           context: orb-publishing
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
-
-      - test-credentials-store:
-          name: test-credentials-store-macos
-          executor: orb-tools/macos
-          context: orb-publishing
-          docker-username: DOCKER_USER
-          docker-password: DOCKER_PASS
-          pre-steps:
-            - docker/install-docker
 
       # build/publish
       - docker/publish:
@@ -389,34 +364,6 @@ workflows:
           dockerize-version: v0.2.0
           goss-version: v0.3.5
 
-      # mac
-      - test:
-          name: latest-mac
-          executor: orb-tools/macos
-          install-goss: false
-
-      - test:
-          name: older-mac
-          executor: orb-tools/macos
-          docker-version: v17.12.1-ce
-          docker-compose-version: 1.21.2
-          dockerize-version: v0.5.0
-          install-goss: false
-
-      - test:
-          name: latest-mac-altogether
-          executor: orb-tools/macos
-          test-all-in-one-command: true
-          install-goss: false
-
-      - test:
-          name: older-mac-altogether
-          executor: orb-tools/macos
-          test-all-in-one-command: true
-          docker-version: v17.12.1-ce
-          docker-compose-version: 1.21.2
-          dockerize-version: v0.5.0
-          install-goss: false
 
       # docker
       - test:
