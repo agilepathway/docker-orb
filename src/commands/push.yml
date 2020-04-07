@@ -30,13 +30,21 @@ steps:
   - deploy:
       name: <<parameters.step-name>>
       command: |
-        IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
-        for tag in "${DOCKER_TAGS[@]}"; do
-          docker push <<parameters.registry>>/<< parameters.image>>:${tag}
-        done
+        if [ -n "<<parameters.tag>>" ]; then
+          IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
+          for tag in "${DOCKER_TAGS[@]}"; do
+            docker push <<parameters.registry>>/<< parameters.image>>:${tag}
+          done
+        else
+          docker push <<parameters.registry>>/<< parameters.image>>
+        fi
 
         if [ -n "<<parameters.digest-path>>" ]; then
-          mkdir -p "$(dirname <<parameters.digest-path>>)"
-          IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
-          docker image inspect --format="{{index .RepoDigests 0}}" <<parameters.registry>>/<< parameters.image>>:"${DOCKER_TAGS[0]}" > "<<parameters.digest-path>>"
+          if [ -n "<<parameters.tag>>" ]; then
+            mkdir -p "$(dirname <<parameters.digest-path>>)"
+            IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
+            docker image inspect --format="{{index .RepoDigests 0}}" <<parameters.registry>>/<< parameters.image>>:"${DOCKER_TAGS[0]}" > "<<parameters.digest-path>>"
+          else
+            docker image inspect --format="{{index .RepoDigests 0}}" <<parameters.registry>>/<< parameters.image>> > "<<parameters.digest-path>>"
+          fi
         fi
