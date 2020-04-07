@@ -30,10 +30,14 @@ steps:
   - deploy:
       name: <<parameters.step-name>>
       command: |
-        IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
-        for tag in "${DOCKER_TAGS[@]}"; do
-          docker push <<parameters.registry>>/<< parameters.image>>:${tag}
-        done
+        if [ -n "<<parameters.tag>>" ]; then
+          IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
+          for tag in "${DOCKER_TAGS[@]}"; do
+            docker push <<parameters.registry>>/<< parameters.image>>:${tag}
+          done
+        else
+          docker push <<parameters.registry>>/<< parameters.image>>
+        fi
 
         if [ -n "<<parameters.digest-path>>" ]; then
           mkdir -p "$(dirname <<parameters.digest-path>>)"
