@@ -1,11 +1,14 @@
 version: 2.1
 
 description: >
+  Fork of the offical CircleCI Docker Orb
+  (https://github.com/CircleCI-Public/docker-orb)
+  for adding experimental features.
   Quickly and easily install/configure/use Docker, `dockerize`, and
   `docker-compose` in any CircleCI job.
 
 display:
-  source_url: https://github.com/CircleCI-Public/docker-orb
+  source_url: https://github.com/agilepathway/docker-orb
 
 orbs:
   bt: circleci/build-tools@2.6.3
