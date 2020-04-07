@@ -200,7 +200,7 @@ workflows:
           requires: [orb-tools/lint]
 
       - orb-tools/publish-dev:
-          orb-name: circleci/docker
+          orb-name: agilepathway/docker
           context: orb-publishing
           requires: [orb-tools/pack]
 
@@ -276,7 +276,7 @@ workflows:
           name: publish-machine
           context: orb-publishing
           dockerfile: test.Dockerfile
-          image: circlecipublic/docker-orb-test
+          image: agilepathway/docker-orb-test
           tag: $CIRCLE_BUILD_NUM-$CIRCLE_SHA1
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
@@ -292,7 +292,7 @@ workflows:
           context: orb-publishing
           use-remote-docker: true
           dockerfile: test.Dockerfile
-          image: circlecipublic/docker-orb-test
+          image: agilepathway/docker-orb-test
           tag: $CIRCLE_SHA1
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
@@ -306,9 +306,9 @@ workflows:
           context: orb-publishing
           use-remote-docker: true
           dockerfile: test.Dockerfile
-          image: circlecipublic/docker-orb-test
+          image: agilepathway/docker-orb-test
           tag: $CIRCLE_SHA1
-          cache_from: circlecipublic/docker-orb-test:$CIRCLE_SHA1
+          cache_from: agilepathway/docker-orb-test:$CIRCLE_SHA1
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
           pre-steps:
@@ -323,9 +323,9 @@ workflows:
           context: orb-publishing
           use-remote-docker: true
           dockerfile: test.Dockerfile
-          image: circlecipublic/docker-orb-test
+          image: agilepathway/docker-orb-test
           tag: $CIRCLE_SHA1-2
-          cache_from: circlecipublic/docker-orb-test:not-exists
+          cache_from: agilepathway/docker-orb-test:not-exists
           docker-username: DOCKER_USER
           docker-password: DOCKER_PASS
 
@@ -500,7 +500,7 @@ workflows:
           goss-version: v0.3.1
 
       - orb-tools/dev-promote-prod-from-commit-subject:
-          orb-name: circleci/docker
+          orb-name: agilepathway/docker
           context: orb-publishing
           add-pr-comment: true
           bot-token-variable: GHI_TOKEN
