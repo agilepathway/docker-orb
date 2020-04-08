@@ -112,6 +112,8 @@ steps:
               for tag in "${DOCKER_TAGS[@]}"; do
                 docker_tag_args="$docker_tag_args -t <<parameters.registry>>/<<parameters.image>>:${tag}"
               done
+              docker_tag_args="$docker_tag_args -t <<parameters.registry>>/<<parameters.image>>:latest"
+
 
               docker build <<#parameters.extra_build_args>><<parameters.extra_build_args>><</parameters.extra_build_args>> \
                 -f <<parameters.path>>/<<parameters.dockerfile>> \
