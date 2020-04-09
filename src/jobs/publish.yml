@@ -184,3 +184,7 @@ steps:
             registry: <<parameters.registry>>
             image: <<parameters.image>>
             tag: <<parameters.tag>>
+            digest-path: /tmp/digest.txt
+        - store_artifacts:
+            path: /tmp/digest.txt
+            destination: docker/digest.txt
