@@ -1,5 +1,6 @@
 description: >
-  Build/publish a Docker image with multiple tags at build time
+  Build/publish a Docker image with multiple tags after deploy
+  as well as at build time
 
 usage:
   version: 2.1
@@ -11,5 +12,5 @@ usage:
     build-docker-image-only:
       jobs:
         - docker/publish:
-            image:  $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
             tag: tag1,tag2,tag3
+            tag_after_deploy: tag4,tag5,tag6

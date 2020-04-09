@@ -64,6 +64,15 @@ parameters:
       Comma-separated list of image tags, defaults are:
       latest,CIRCLECI-$CIRCLE_BUILD_NUM,GIT-COMMIT-$CIRCLE_SHA1
 
+  tag_after_deploy:
+    type: string
+    default: ""
+    description: >
+      Comma-separated list of image tags to be added after
+      the image has been pushed (e.g. version numbers
+      of software installed on the image, which can only be
+      known after building the image, not before)
+
   registry:
     type: string
     default: docker.io
@@ -138,6 +147,13 @@ steps:
         source "$BASH_ENV"
         echo "DEFAULT_IMAGE_NAME environment variable set: $default_image_name"
 
+  - run:
+      name: Export image name
+      command: |
+        echo "export IMAGE_NAME=<<parameters.image>>" >> "$BASH_ENV"
+        source "$BASH_ENV"
+        echo "IMAGE_NAME environment variable set: <<parameters.image>>"
+
   - when:
       name: Run after_checkout lifecycle hook steps
       condition: <<parameters.after_checkout>>
@@ -190,9 +206,18 @@ steps:
         - store_artifacts:
             path: /tmp/digest.txt
             destination: docker/digest.txt
-        - run:
-            name: list all the tags
-            command: docker images <<parameters.image>> --format="{{ .Tag }}" | tee -a  "/tmp/tags.txt"
-        - store_artifacts:
-            path: /tmp/tags.txt
-            destination: docker/tags.txt
+
+  - when:
+      name: Add tags that can only be added after deploy
+      condition: <<parameters.tag_after_deploy>>
+      steps:
+        - tag-after-deploy:
+            tag: <<parameters.tag_after_deploy>>
+
+  - run:
+      name: list all the tags
+      command: docker images <<parameters.image>> --format="{{ .Tag }}" | tee -a  "/tmp/tags.txt"
+
+  - store_artifacts:
+      path: /tmp/tags.txt
+      destination: docker/tags.txt
