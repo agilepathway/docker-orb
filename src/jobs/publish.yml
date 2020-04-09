@@ -59,8 +59,10 @@ parameters:
 
   tag:
     type: string
-    default: $CIRCLE_SHA1
-    description: Comma-separated list of image tags, defaults to the value of $CIRCLE_SHA1
+    default: latest,GIT-COMMIT-$CIRCLE_SHA1,CIRCLECI-$CIRCLE_BUILD_NUM
+    description: >
+      Comma-separated list of image tags, defaults are:
+      latest,CIRCLECI-$CIRCLE_BUILD_NUM,GIT-COMMIT-$CIRCLE_SHA1
 
   registry:
     type: string
