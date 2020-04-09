@@ -51,7 +51,11 @@ parameters:
 
   image:
     type: string
-    description: Name of image to build
+    default: $DEFAULT_IMAGE_NAME
+    description: >
+      Name of image to build, defaults to the value of
+      $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+      (with the branch name appended too if not on master)
 
   tag:
     type: string
@@ -119,6 +123,18 @@ parameters:
 
 steps:
   - checkout
+
+  - run:
+      name: Set default image name
+      command: |
+        if [ "$CIRCLE_BRANCH" = "master" ]; then
+            default_image_name=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+        else
+            default_image_name=$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME-$CIRCLE_BRANCH
+        fi
+        echo "export DEFAULT_IMAGE_NAME=$default_image_name" >> "$BASH_ENV"
+        source "$BASH_ENV"
+        echo "DEFAULT_IMAGE_NAME environment variable set: $default_image_name"
 
   - when:
       name: Run after_checkout lifecycle hook steps
