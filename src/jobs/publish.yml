@@ -188,3 +188,9 @@ steps:
         - store_artifacts:
             path: /tmp/digest.txt
             destination: docker/digest.txt
+        - run:
+            name: list all the tags
+            command: docker images <<parameters.image>> --format="{{ .Tag }}" | tee -a  "/tmp/tags.txt"
+        - store_artifacts:
+            path: /tmp/tags.txt
+            destination: docker/tags.txt
