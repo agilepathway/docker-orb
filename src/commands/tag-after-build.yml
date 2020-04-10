@@ -1,4 +1,4 @@
-description: Tag a Docker image after it has been pushed
+description: Tag a Docker image after it has been built
 
 parameters:
 
@@ -15,7 +15,7 @@ parameters:
     type: string
     description: >
       Comma-separated list of image tags to be added after
-      the docker image has been pushed (e.g. version numbers
+      the docker image has been built (e.g. version numbers
       of software installed on the image, which can only be
       known after building the image, not before)
 

@@ -64,12 +64,12 @@ parameters:
       Comma-separated list of image tags, defaults are:
       latest,CIRCLECI-$CIRCLE_BUILD_NUM,GIT-COMMIT-$CIRCLE_SHA1
 
-  tag_after_deploy:
+  tag_after_build:
     type: string
     default: ""
     description: >
       Comma-separated list of image tags to be added after
-      the image has been pushed (e.g. version numbers
+      the image has been built (e.g. version numbers
       of software installed on the image, which can only be
       known after building the image, not before)
 
@@ -195,24 +195,25 @@ steps:
       condition: <<parameters.after_build>>
       steps: <<parameters.after_build>>
 
+
+  - when:
+      name: Add tags that can only be added after build
+      condition: <<parameters.tag_after_build>>
+      steps:
+        - tag-after-build:
+            tag: <<parameters.tag_after_build>>
+
   - when:
       condition: <<parameters.deploy>>
       steps:
         - push:
             registry: <<parameters.registry>>
             image: <<parameters.image>>
-            tag: <<parameters.tag>>
+            tag: <<parameters.tag>>,<<parameters.tag_after_build>>
             digest-path: /tmp/digest.txt
         - store_artifacts:
             path: /tmp/digest.txt
             destination: docker/digest.txt
-
-  - when:
-      name: Add tags that can only be added after deploy
-      condition: <<parameters.tag_after_deploy>>
-      steps:
-        - tag-after-deploy:
-            tag: <<parameters.tag_after_deploy>>
 
   - run:
       name: list all the tags
