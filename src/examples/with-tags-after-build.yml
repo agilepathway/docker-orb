@@ -1,5 +1,5 @@
 description: >
-  Build/publish a Docker image with multiple tags after deploy
+  Build/publish a Docker image with multiple tags after build
   as well as at build time
 
 usage:
@@ -13,4 +13,4 @@ usage:
       jobs:
         - docker/publish:
             tag: tag1,tag2,tag3
-            tag_after_deploy: tag4,tag5,tag6
+            tag_after_build: tag4,tag5,tag6
