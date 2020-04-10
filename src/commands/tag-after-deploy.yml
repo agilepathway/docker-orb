@@ -1,0 +1,29 @@
+description: Tag a Docker image after it has been pushed
+
+parameters:
+
+  image:
+    type: string
+    default: $IMAGE_NAME
+    description: >
+      Name of image to build, defaults to the value of
+      the $IMAGE_NAME variable (which is set during the
+      publish job to be whatever was set as the image
+      name there)
+
+  tag:
+    type: string
+    description: >
+      Comma-separated list of image tags to be added after
+      the docker image has been pushed (e.g. version numbers
+      of software installed on the image, which can only be
+      known after building the image, not before)
+
+steps:
+  - run:
+      name: tag
+      command: |
+        IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
+        for tag in "${DOCKER_TAGS[@]}"; do
+          docker tag <<parameters.image>> <<parameters.image>>:${tag}
+        done
