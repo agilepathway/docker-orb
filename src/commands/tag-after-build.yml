@@ -2,6 +2,11 @@ description: Tag a Docker image after it has been built
 
 parameters:
 
+  step-name:
+    type: string
+    default: Docker tag
+    description: Specify a custom step name for this command, if desired
+
   image:
     type: string
     default: $IMAGE_NAME
@@ -21,7 +26,7 @@ parameters:
 
 steps:
   - run:
-      name: tag
+      name: <<parameters.step-name>>
       command: |
         IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
         for tag in "${DOCKER_TAGS[@]}"; do
