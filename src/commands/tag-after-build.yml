@@ -28,7 +28,10 @@ steps:
   - run:
       name: <<parameters.step-name>>
       command: |
-        IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
+        # set the tag as a variable because if we just use parameters.tag in the loop,
+        # then any errors will be suppressed
+        dockerTags="<< parameters.tag >>"
+        IFS="," read -ra DOCKER_TAGS \<<< "$dockerTags"
         for tag in "${DOCKER_TAGS[@]}"; do
           docker tag <<parameters.image>> <<parameters.image>>:${tag}
         done
