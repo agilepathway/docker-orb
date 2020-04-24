@@ -59,10 +59,10 @@ parameters:
 
   tag:
     type: string
-    default: latest,git-commit-$CIRCLE_SHA1,circleci-$CIRCLE_BUILD_NUM
+    default: latest,git-commit-$CIRCLE_SHA1,circleci-pipeline-<< pipeline.number >>,circleci-build-$CIRCLE_BUILD_NUM
     description: >
       Comma-separated list of image tags, defaults are:
-      latest,circleci-$CIRCLE_BUILD_NUM,git-commit-$CIRCLE_SHA1
+      latest,circleci-pipeline-<< pipeline.number >>,circleci-build-$CIRCLE_BUILD_NUM,git-commit-$CIRCLE_SHA1
 
   tag_after_build:
     type: string
