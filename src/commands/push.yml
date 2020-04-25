@@ -32,7 +32,7 @@ steps:
       command: |
         IFS="," read -ra DOCKER_TAGS \<<< "<< parameters.tag >>"
         for tag in "${DOCKER_TAGS[@]}"; do
-          docker push <<parameters.registry>>/<< parameters.image>>:${tag}
+          docker push wrong<<parameters.registry>>/<< parameters.image>>:${tag}
         done
 
         if [ -n "<<parameters.digest-path>>" ]; then
